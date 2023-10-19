@@ -39,7 +39,7 @@ export const Whapper = styled.button<WrapperProps>`
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg, #ff5f5f 0%, #f062c0 50%);
+    background: ${theme.colors.black};
     color: ${theme.colors.white};
     border: 0;
     border-radius: ${theme.border.radius};
@@ -48,7 +48,7 @@ export const Whapper = styled.button<WrapperProps>`
     text-decoration: none;
 
     &:hover {
-      background: linear-gradient(180deg, #e35565 0%, #d958a6 50%);
+      background: ${theme.colors.darkGray};
     }
 
     &:disabled {

@@ -1,10 +1,10 @@
 import { Layout } from 'components/Layout'
-import LoginTemplate from 'templates/Login'
+import AgendaTemplate from 'templates/Agenda'
 
-export default function Home() {
+export default function Agenda() {
   return (
     <Layout title="Agenda de Churras">
-      <LoginTemplate />
+      <AgendaTemplate />
     </Layout>
   )
 }
