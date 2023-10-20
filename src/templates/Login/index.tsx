@@ -4,15 +4,23 @@ import { TextField } from 'components/TextField'
 import * as S from './styles'
 import { useAuth } from 'services/hooks/useAuth'
 import { Loading } from 'components/Loading'
+import { useRouter } from 'next/router'
 
 const LoginTemplate = () => {
   const [values, setValues] = useState({ email: '', password: '' })
   const [formError, setFormError] = useState('')
-  const { loading, signIn, authError } = useAuth()
+  const { loading, signIn, authError, go } = useAuth()
+  const routes = useRouter()
+  const { push } = routes
+  useEffect(() => {
+    setFormError(authError || '')
+  }, [authError])
 
   useEffect(() => {
-    setFormError(authError && authError)
-  }, [authError])
+    if (go) {
+      push('/agenda')
+    }
+  }, [go, push])
 
   const handleInput = (field: string, value: string) => {
     setValues((s) => ({ ...s, [field]: value }))

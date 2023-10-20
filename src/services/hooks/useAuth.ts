@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
+import { api } from 'services/api'
 
 type Auth = {
   email: string
@@ -7,30 +7,35 @@ type Auth = {
 }
 
 export const useAuth = () => {
-  const routes = useRouter()
   const [authError, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const { push } = routes
+  const [go, setGo] = useState('')
 
-  const signIn = useCallback(
-    ({ email, password }: Auth) => {
-      setLoading(true)
-      if (email && password) {
-        setTimeout(() => {
-          setLoading(false)
-          return push('/agenda')
-        }, 2000)
-      } else {
-        setTimeout(() => {
-          setLoading(false)
-          setError('Usuário ou senha inválidos')
-        }, 2000)
-      }
-    },
-    [push]
-  )
+  const signIn = useCallback(({ email, password }: Auth) => {
+    setLoading(true)
+    setError('')
+    api
+      .get('auth', {
+        params: {
+          email,
+          password
+        }
+      })
+      .then((response) => {
+        console.log('%c⧭', 'color: #00e600', response.data)
+        setLoading(false)
+        setGo(response.data)
+      })
+      .catch((error) => {
+        console.log('%c⧭', 'color: #e50000', error.response.data)
+        setError(error.response.data.errors)
+        setLoading(false)
+      })
+    setLoading(true)
+  }, [])
 
   return {
+    go,
     loading,
     authError,
     signIn
