@@ -1,7 +1,9 @@
-import React from 'react'
-import { LayoutProps } from './types'
-import { Container } from 'components/Container'
-import * as S from './styles'
+import React from 'react';
+
+import { Container } from 'components/Container';
+
+import * as S from './styles';
+import { LayoutProps } from './types';
 
 export const Layout = ({ children, title }: LayoutProps) => {
   return (
@@ -11,5 +13,5 @@ export const Layout = ({ children, title }: LayoutProps) => {
       </S.Wrapper>
       {children}
     </Container>
-  )
-}
+  );
+};

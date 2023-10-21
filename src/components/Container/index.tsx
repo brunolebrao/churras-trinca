@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components'
+'use client';
+import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
   ${({ theme }) => css`
@@ -17,4 +18,4 @@ export const Container = styled.div`
     width: 100vw;
     height: 100vh;
   `}
-`
+`;

@@ -4,36 +4,24 @@ import React, { createContext, useCallback, useContext, useState } from 'react';
 import { APP_ROUTES } from 'constants/app-router';
 import { api } from 'services/api';
 
-type People = {
-  id: number;
-  name: string;
-  amount: number;
+type User = {
+  email: string;
+  password: string;
 };
-
-enum Category {
-  'SEMBEBIDAS',
-  'COMBEBIDAS'
-}
-
-export type EventType = {
-  id: number;
-  date: string;
-  name: string;
-  peoples: People[];
-  category: Category;
-  amount: string;
-  createdAt: string;
-};
-type EventInput = Omit<EventType, 'id' | 'createdAt'>;
 
 export type AuthContextProps = {
-  events: EventType[];
-  createEvents: (events: EventInput) => Promise<void>;
+  user: User;
+  auth: boolean;
+  loading: boolean;
+  onSignIn: (user: { email: string; password: string }) => void;
 };
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [event, setEvents] = useState<EventType[]>([]);
+  const [user, setUser] = useState<User>({ email: '', password: '' });
+  const [loading, setLoading] = useState(false);
+  const [auth, setAuth] = useState(false);
+  const { push } = useRouter();
 
   const onSignIn = useCallback(
     async (user: { email: string; password: string }) => {
