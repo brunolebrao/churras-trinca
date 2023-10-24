@@ -48,7 +48,7 @@ export const Input = styled.input<IconPositionProps>`
 
 export const Label = styled.label`
   ${({ theme }) => css`
-    font-size: ${theme.font.sizes.xlarge};
+    font-size: ${theme.font.sizes.xsmall};
     color: ${theme.colors.black};
     cursor: pointer;
   `}

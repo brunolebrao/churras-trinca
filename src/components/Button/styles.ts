@@ -4,7 +4,7 @@ import { ButtonProps } from '.';
 
 type WrapperProps = {
   hasIcon: boolean;
-} & Pick<ButtonProps, 'size' | 'fullWidth'>;
+} & Pick<ButtonProps, 'size' | 'fullWidth' | 'color'>;
 
 const wrapperModifiers = {
   small: (theme: DefaultTheme) => css`
@@ -24,6 +24,34 @@ const wrapperModifiers = {
   fullWidth: () => css`
     width: 100%;
   `,
+  primary: (theme: DefaultTheme) => css`
+    background: ${theme.colors.primary};
+    color: ${theme.colors.black};
+    &:hover {
+      filter: brightness(0.8);
+    }
+  `,
+  secondary: (theme: DefaultTheme) => css`
+    background: ${theme.colors.secondary};
+    color: ${theme.colors.black};
+    &:hover {
+      filter: brightness(0.8);
+    }
+  `,
+  tertiary: (theme: DefaultTheme) => css`
+    background: ${theme.colors.black};
+    color: ${theme.colors.white};
+    &:hover {
+      filter: brightness(0.8);
+    }
+  `,
+  danger: (theme: DefaultTheme) => css`
+    background: ${theme.colors.red};
+    color: ${theme.colors.white};
+    &:hover {
+      filter: brightness(0.8);
+    }
+  `,
   withIcon: (theme: DefaultTheme) => css`
     svg {
       width: 1.5rem;
@@ -36,7 +64,7 @@ const wrapperModifiers = {
 };
 
 export const Whapper = styled.button<WrapperProps>`
-  ${({ theme, size, fullWidth, hasIcon }) => css`
+  ${({ theme, size, fullWidth, hasIcon, color }) => css`
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -48,15 +76,16 @@ export const Whapper = styled.button<WrapperProps>`
     cursor: pointer;
     text-decoration: none;
 
-    &:hover {
+    /* &:hover {
       background: ${theme.colors.darkGray};
-    }
+    } */
 
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
     ${!!size && wrapperModifiers[size](theme)}
+    ${!!color && wrapperModifiers[color](theme)}
     ${fullWidth && wrapperModifiers.fullWidth()}
     ${hasIcon && wrapperModifiers.withIcon(theme)}
   `}

@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 import React, { createContext, useCallback, useContext, useState } from 'react';
 
 import { APP_ROUTES } from 'constants/app-router';
+import { setLocalStorage } from 'functions/local-storage';
 import { api } from 'services/api';
 
 type User = {
@@ -33,19 +34,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }
         })
         .then((response) => {
-          console.log('%c⧭', 'color: #00bf00', response);
           setLoading(false);
           setAuth(response.data.token);
           if (response.data.token) {
-            localStorage.setItem('userToken', response.data);
+            setLocalStorage('userToken', response.data);
             push(APP_ROUTES.private.events);
           } else {
             push(APP_ROUTES.public.login);
           }
         })
         .catch((error) => {
-          console.log('%c⧭', 'color: #e50000', error.response.data);
-          // setError(error.response.data.errors);
+          console.log('error', error);
           setLoading(false);
         });
       setUser(user);

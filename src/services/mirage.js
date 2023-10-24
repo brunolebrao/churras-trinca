@@ -10,18 +10,21 @@ export function makeServer({ environment = 'test' } = {}) {
         events: [
           {
             id: 1,
-            name: 'Festa da casa',
+            name: 'Festa da turma',
             date: '20/10/2023',
+            description: 'Festa da turma de 2023',
             peoples: [
               {
                 id: 1,
                 name: 'Bruno',
-                amount: 20
+                amount: 20,
+                category: 'SEMBEBIDAS'
               },
               {
                 id: 2,
                 name: 'Gabriela',
-                amount: 20
+                amount: 20,
+                category: 'COMBEBIDAS'
               }
             ],
             type: 'deposit',
@@ -31,8 +34,9 @@ export function makeServer({ environment = 'test' } = {}) {
           },
           {
             id: 2,
-            name: 'Festa do Mozi',
+            name: 'Festa da Família',
             date: '18/10/2023',
+            description: 'Festa maneirinha',
             peoples: [
               {
                 id: 1,
@@ -43,10 +47,20 @@ export function makeServer({ environment = 'test' } = {}) {
                 id: 2,
                 name: 'Gabriela',
                 amount: 20
+              },
+              {
+                id: 3,
+                name: 'Matheo',
+                amount: 10
+              },
+              {
+                id: 4,
+                name: 'Enrico',
+                amount: 20
               }
             ],
             type: 'deposit',
-            category: 'COMBEBIDA',
+            category: 'COMBEBIDAS',
             amount: 20,
             createdAt: new Date('2021-09-24 09:00:00')
           }
@@ -59,20 +73,40 @@ export function makeServer({ environment = 'test' } = {}) {
       this.get('/events', () => {
         return this.schema.all('event');
       });
+      this.get('/events/:id', (schema, request) => {
+        const id = request.params.id;
+        return schema.events.find(id);
+      });
 
       this.get('/auth', (schema, request) => {
-        console.log('%c⧭', 'color: #917399', request);
-        console.log('%c⧭', 'color: #0088cc', schema);
         if (request.queryParams.email && request.queryParams.password) {
-          console.log('%c⧭', 'color: #ffa640', 'AQUI');
           return { token: true };
         }
       });
 
       this.post('/events', (schema, request) => {
         const data = JSON.parse(request.requestBody);
+        delete data.id;
 
         return schema.create('event', data);
+      });
+
+      this.patch('/events/:id', (schema, request) => {
+        const id = request.params.id;
+
+        const data = JSON.parse(request.requestBody);
+
+        schema.events.find(id).update(data);
+
+        return this.schema.all('event');
+      });
+
+      this.delete('/events/:id', (schema, request) => {
+        const id = request.params.id;
+
+        schema.events.find(id).destroy();
+
+        return this.schema.all('event');
       });
     }
   });

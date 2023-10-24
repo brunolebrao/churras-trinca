@@ -2,80 +2,102 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState
 } from 'react';
 
+import { EventType } from 'pages/Agenda/types';
 import { api } from 'services/api';
 
-export interface Transaction {
-  id: number;
-  title: string;
-  amount: number;
-  type: string;
-  category: string;
-  createdAt: string;
-}
+type EventInput = Omit<EventType, 'id' | 'createdAt'>;
 
-type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>;
-
-interface TransactionContextProps {
+interface EventContextProps {
   children: React.ReactNode;
 }
 
-interface TransactionContextData {
-  transactions: Transaction[];
-  createTransaction: (transaction: TransactionInput) => Promise<void>;
-  getEvent: () => Promise<void>;
+interface EventContextData {
+  events: EventType[];
+  event?: EventType;
+  postEvent: (event: EventInput) => Promise<void>;
+  putEvent: (event: EventType) => Promise<void>;
+  getEventPerId: (id: number) => void;
+  deleteEvent: (id: number) => void;
+  setEvent: React.Dispatch<React.SetStateAction<EventType | undefined>>;
 }
 
-const TransactionsContext = createContext<TransactionContextData>(
-  {} as TransactionContextData
-);
+const EventsContext = createContext<EventContextData>({} as EventContextData);
 
-export function TransactionsProvider({ children }: TransactionContextProps) {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+export function EventsProvider({ children }: EventContextProps) {
+  const [events, setEvents] = useState<EventType[]>([]);
+  const [event, setEvent] = useState<EventType>();
 
-  // useEffect(() => {
-  //   api
-  //     .get('transactions')
-  //     .then((response) => setTransactions(response.data.transactions))
-  // }, [])
-
-  const getEvent = useCallback(async () => {
-    api
-      .get('transactions')
-      .then((response) => setTransactions(response.data.transactions));
+  useEffect(() => {
+    api.get('events').then((response) => setEvents(response.data.events));
   }, []);
 
-  const createTransaction = useCallback(
-    async (transactionInput: TransactionInput) => {
-      const response = await api.post('transactions', {
-        ...transactionInput,
+  const getEventPerId = useCallback(async (id: number) => {
+    await api.get(`events/${id}`).then((response) => {
+      if (response.data.event) {
+        setEvent(response.data.event);
+      }
+    });
+  }, []);
+
+  const postEvent = useCallback(
+    async (eventInput: EventInput) => {
+      const response = await api.post('events', {
+        ...eventInput,
         createdAt: new Date()
       });
+      const { event } = response.data;
 
-      const { transaction } = response.data;
-
-      setTransactions([...transactions, transaction]);
+      setEvents([...events, event]);
     },
-    [transactions]
+    [events]
   );
 
+  const putEvent = useCallback(async (eventInput: EventType) => {
+    const response = await api.patch(`events/${eventInput.id}`, {
+      ...eventInput,
+      createdAt: new Date()
+    });
+
+    const { events } = response.data;
+
+    setEvents(events);
+  }, []);
+
+  const deleteEvent = useCallback(async (eventId: number) => {
+    const response = await api.delete(`events/${eventId}`);
+
+    const { events } = response.data;
+
+    setEvents(events);
+  }, []);
+
   const contextValue = useMemo(
-    () => ({ transactions, createTransaction, getEvent }),
-    [transactions, createTransaction, getEvent]
+    () => ({
+      postEvent,
+      events,
+      event,
+      getEventPerId,
+      setEvent,
+      putEvent,
+      deleteEvent
+    }),
+    [postEvent, events, event, getEventPerId, setEvent, putEvent, deleteEvent]
   );
 
   return (
-    <TransactionsContext.Provider value={{ ...contextValue }}>
+    <EventsContext.Provider value={contextValue}>
       {children}
-    </TransactionsContext.Provider>
+    </EventsContext.Provider>
   );
 }
 
-export function useTransactions() {
-  const context = useContext(TransactionsContext);
+export function useEvents() {
+  const context = useContext(EventsContext);
 
   return context;
 }

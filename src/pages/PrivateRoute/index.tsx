@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
 import { APP_ROUTES } from 'constants/app-router';
-import { checkUserAuthenticated } from 'functions/check-user-authenticated';
+import { getLocalStorage } from 'functions/local-storage';
 
 type PrivateRouteProps = {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ type PrivateRouteProps = {
 const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const { push } = useRouter();
 
-  const isUserAuthenticated = checkUserAuthenticated();
+  const isUserAuthenticated = getLocalStorage('userToken');
 
   useEffect(() => {
     if (!isUserAuthenticated) {

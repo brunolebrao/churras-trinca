@@ -15,6 +15,7 @@ type ButtonTypes =
 export type ButtonProps = {
   children?: React.ReactNode;
   size?: 'small' | 'medium' | 'large';
+  color?: 'primary' | 'secondary' | 'tertiary' | 'danger';
   fullWidth?: boolean;
   icon?: JSX.Element;
   as?: React.ElementType;
@@ -23,10 +24,21 @@ export type ButtonProps = {
 const ButtonWithRef: ForwardRefRenderFunction<
   HTMLAnchorElement & HTMLButtonElement,
   ButtonProps
-> = ({ children, size = 'medium', fullWidth = false, icon, ...props }, ref) => (
+> = (
+  {
+    children,
+    size = 'medium',
+    fullWidth = false,
+    icon,
+    color = 'tertiary',
+    ...props
+  },
+  ref
+) => (
   <S.Whapper
     ref={ref}
     size={size}
+    color={color}
     fullWidth={fullWidth}
     hasIcon={!!icon}
     {...props}
