@@ -5,6 +5,7 @@ import { Collapse } from 'components/Collapse';
 
 import * as S from './styles';
 
+import dayjs from 'dayjs';
 import { EventType } from 'pages/Agenda/types';
 
 type CardProps = {
@@ -20,7 +21,8 @@ export const Card = ({ event, onClick, handleDelete }: CardProps) => {
       <S.Content>
         <S.CardHeader>
           <S.CardTitle>{event.name}</S.CardTitle>
-          <S.CardDate>{event.date}</S.CardDate>
+          {/* <S.CardDate>{event.date}</S.CardDate> */}
+          <S.CardDate>{dayjs(event.date).format('DD/MM/YYYY')}</S.CardDate>
           <S.CardCategory>{event.description}</S.CardCategory>
         </S.CardHeader>
         <S.CardBody>

@@ -10,21 +10,19 @@ export function makeServer({ environment = 'test' } = {}) {
         events: [
           {
             id: 1,
-            name: 'Festa da turma',
-            date: '20/10/2023',
-            description: 'Festa da turma de 2023',
+            name: 'Festa de Natal',
+            date: '2023-12-25',
+            description: 'Tragam o que forem beber',
             peoples: [
               {
                 id: 1,
                 name: 'Bruno',
-                amount: 20,
-                category: 'SEMBEBIDAS'
+                amount: 20
               },
               {
                 id: 2,
                 name: 'Gabriela',
-                amount: 20,
-                category: 'COMBEBIDAS'
+                amount: 20
               }
             ],
             type: 'deposit',
@@ -34,9 +32,9 @@ export function makeServer({ environment = 'test' } = {}) {
           },
           {
             id: 2,
-            name: 'Festa da Família',
-            date: '18/10/2023',
-            description: 'Festa maneirinha',
+            name: 'Churras de ano novo',
+            date: '2023-12-31',
+            description: 'Tragam apenas a fome',
             peoples: [
               {
                 id: 1,

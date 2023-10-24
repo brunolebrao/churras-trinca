@@ -57,7 +57,11 @@ export const FormEvent = ({ control, errors }: FormEventProps) => {
           name="amount"
           control={control}
           render={({ field }) => (
-            <TextField type="number" label="Valor sugerido" {...field} />
+            <TextField
+              type="number"
+              label="Valor sugerido po pessoa"
+              {...field}
+            />
           )}
         />
       </S.Grid>
